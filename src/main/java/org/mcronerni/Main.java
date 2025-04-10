@@ -4,12 +4,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.HashMap;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -17,7 +19,14 @@ public class Main {
     public static WebDriver driver;
     public static void main(String[] args) throws IOException, InterruptedException {
         System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/src/utils/chromedriver.exe");
-        driver = new ChromeDriver();
+
+        ChromeOptions options = new ChromeOptions();
+        options.setExperimentalOption("prefs", new HashMap<String, Boolean>(){{
+            put("credentials_enable_service", false);
+        }});
+        options.addArguments("--incognito");
+
+        driver = new ChromeDriver(options);
         driver.manage().window().maximize();
         driver.get("https://www.saucedemo.com/v1/");
 
@@ -119,7 +128,7 @@ public class Main {
 
         By thanksLocator = By.xpath("//h2[contains(@class, 'complete-header')]");
         WebElement thanks = wait.until(ExpectedConditions.visibilityOfElementLocated(thanksLocator));
-        System.out.println("Total: "+ thanks.getText());
+        System.out.println("Message: "+ thanks.getText());
 
         Thread.sleep(3000);
         driver.quit();
